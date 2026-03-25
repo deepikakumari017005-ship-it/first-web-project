@@ -113,6 +113,10 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
+LOGIN_URL='/login/'
+
+MEDIA_URL='/media/'
+MEDIA_ROOT='media'
 
 
 # Static files (CSS, JavaScript, Images)

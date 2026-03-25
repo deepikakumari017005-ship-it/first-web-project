@@ -1,27 +1,104 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Dashboard</title>
     <style>
         body {
-            font-family: Arial;
+            font-family: Arial, sans-serif;
             text-align: center;
             background: linear-gradient(to right, #f5c2f2, #b11deb);
-            color: white;
+            margin: 0;
+            padding: 0;
         }
-        .box {
-            margin-top: 150px;
+
+        .navbar {
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 15px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .container {
+            margin-top: 30px;
+            padding: 20px;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            background: white;
+            margin: 10px auto;
+            padding: 15px;
+            width: 50%;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .delete {
+            background-color: #ff4d4d;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 4px;
         }
     </style>
 </head>
+
 <body>
+    <div class="navbar">
+        <div><strong>Dashboard</strong></div>
+        <div>
+            Hello, {{ request.user.username }}
+            <a href="/logout/" style="margin-left: 10px;">Logout</a>
+        </div>
+    </div>
 
-<div class="box">
-    <h1>Welcome to Dashboard 🎉</h1>
-    <p>You are logged in successfully!</p>
+    <div class="container">
+        <h2>My To-Do List</h2>
 
-    <a href="/" style="color:white;">Go Home</a>
-</div>
+        <!-- Form to Add Tasks -->
+        <form method="POST" style="margin-bottom: 30px;">
+            {% csrf_token %}
+            <input type="text" name="title" placeholder="Enter task" required>
+            <button type="submit">ADD Task</button>
+        </form>
 
+        <ul>
+            {% for task in tasks %}
+            <li>
+                <div>
+                   {% if task.image %}
+    <img src="{{ task.image.url }}" width="50" style="vertical-align: middle; margin-right: 10px;">
+{% endif %}
+
+<span >="{% if task.completed %}text-decoration: line-through; color: gray;{% endif %}">
+    {{ task.title }}
+</span>
+                </div>
+
+                <div>
+                    <a href="/complete/{{ task.id }}/">
+                        <button>Complete</button>
+                    </a>
+                    <a href="/delete/{{ task.id }}/">
+                        <button class="delete">X</button>
+                    </a>
+                </div>
+            </li>
+            {% empty %}
+            <p>No Tasks yet</p>
+            {% endfor %}
+        </ul>
+    </div>
 </body>
+
 </html>
